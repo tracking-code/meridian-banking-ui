@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meridian Banking — Sign In</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #0f172a;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 430px;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+      border: 1px solid #e2e8f0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #2563eb, #0ea5e9);
+      color: #ffffff;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    h1 {
+      font-size: 1.35rem;
+      margin-bottom: 6px;
+      color: #0f172a;
+    }
+
+    .sub {
+      font-size: 0.86rem;
+      color: #64748b;
+      margin-bottom: 20px;
+      line-height: 1.45;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      color: #0f172a;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 16px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .error-msg {
+      margin-top: 12px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: #dc2626;
+      min-height: 20px;
+    }
+
+    .note {
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <div class="brand">
+      <div class="mark">M</div>
+      <div class="brand-name">Meridian Banking</div>
+    </div>
+    <div class="tag">Demo Sign-In • Credential Check</div>
+    <h1>Sign In to Account</h1>
+    <p class="sub">
+      Enter your demo login and password to view availability, balance, and features for <strong>Lena Baker</strong> &amp; <strong>Ligon Kelley</strong>.
+    </p>
+
+    <form onsubmit="verifyLogin(event)">
+      <div class="field">
+        <label for="loginId">Login (Email or Username)</label>
+        <input type="text" id="loginId" placeholder="lena.baker@demo.local" required>
+      </div>
+      <div class="field">
+        <label for="loginPass">Password</label>
+        <input type="password" id="loginPass" placeholder="Enter password" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Sign In</button>
+      <div class="error-msg" id="errorBox"></div>
+    </form>
+
+    <p class="note">
+      Demo credentials: <code>lena.baker@demo.local</code> or <code>ligon.kelley@demo.local</code> with password <code>Meridian#2500</code>. Static front-end demo only.
+    </p>
+  </div>
+
+  <script>
+    const VALID_USERS = {
+      "lena.baker@demo.local": "Lena Baker",
+      "ligon.kelley@demo.local": "Ligon Kelley"
+    };
+    const DEMO_PASSWORD = "Meridian#2500";
+
+    function verifyLogin(e) {
+      e.preventDefault();
+      const id = document.getElementById("loginId").value.trim().toLowerCase();
+      const pass = document.getElementById("loginPass").value;
+      const err = document.getElementById("errorBox");
+
+      if (!VALID_USERS[id] || pass !== DEMO_PASSWORD) {
+        err.textContent = "Invalid demo login or password. Try lena.baker@demo.local and Meridian#2500.";
+        return;
+      }
+
+      sessionStorage.setItem("meridianAuth", "true");
+      sessionStorage.setItem("meridianDemoUser", VALID_USERS[id]);
+      window.location.href = "dashboard.html";
+    }
+  </script>
+</body>
+</html>
