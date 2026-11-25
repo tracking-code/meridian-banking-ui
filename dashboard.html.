@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meridian Banking — Client Portal</title>
+  <style>
+    :root {
+      --navy-950: #060b16;
+      --navy-900: #0b1324;
+      --navy-800: #111d36;
+      --slate-900: #0f172a;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-500: #64748b;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --slate-50: #f8fafc;
+      --white: #ffffff;
+      --blue-700: #1d4ed8;
+      --blue-600: #2563eb;
+      --red-700: #b91c1c;
+      --red-600: #dc2626;
+      --red-100: #fee2e2;
+      --red-50: #fef2f2;
+      --green-700: #047857;
+      --green-600: #059669;
+      --green-50: #ecfdf5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: #e6ecf2;
+      color: var(--slate-900);
+      min-height: 100vh;
+    }
+
+    .top-utility {
+      background: var(--navy-950);
+      color: #cbd5e1;
+      font-size: 0.72rem;
+      padding: 7px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .top-utility span strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .main-nav {
+      background: var(--navy-900);
+      color: var(--white);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 3px solid var(--blue-700);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-emblem {
+      width: 38px;
+      height: 38px;
+      border-radius: 6px;
+      background: linear-gradient(145deg, #1e40af, #0284c7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .brand-name {
+      font-size: 1.08rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-division {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      letter-spacing: 0.03em;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .demo-tag {
+      background: #1e293b;
+      color: #93c5fd;
+      border: 1px solid #334155;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn {
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 9px 14px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-sm {
+      padding: 6px 11px;
+      font-size: 0.76rem;
+    }
+
+    .btn-signout {
+      background: transparent;
+      color: #e2e8f0;
+      border-color: #475569;
+    }
+
+    .btn-primary {
+      background: var(--blue-700);
+      color: var(--white);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--slate-900);
+      border-color: #cbd5e1;
+    }
+
+    .btn-dark {
+      background: var(--slate-900);
+      color: var(--white);
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 16px 36px;
+    }
+
+    .alert-strip {
+      background: var(--red-50);
+      border: 1px solid #fca5a5;
+      border-left: 5px solid var(--red-600);
+      color: var(--red-700);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      line-height: 1.45;
+    }
+
+    .alert-strip.unblocked {
+      background: var(--green-50);
+      border-color: #6ee7b7;
+      border-left-color: var(--green-600);
+      color: var(--green-700);
+    }
+
+    .summary-card {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+    }
+
+    .summary-header {
+      background: var(--navy-800);
+      color: var(--white);
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .acct-type {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .badge-blocked {
+      background: var(--red-100);
+      color: var(--red-700);
+      border: 1px solid #f87171;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .badge-active {
+      background: var(--green-50);
+      color: var(--green-700);
+      border: 1px solid #6ee7b7;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .summary-body {
+      padding: 18px;
+    }
+
+    .holders-row {
+      font-size: 0.9rem;
+      color: var(--slate-700);
+      margin-bottom: 6px;
+    }
+
+    .balance-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .balance-amount {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--slate-900);
+      letter-spacing: -0.02em;
+    }
+
+    .balance-sub {
+      font-size: 0.78rem;
+      color: var(--slate-500);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+      gap: 12px;
+      padding-top: 14px;
+    }
+
+    .meta-cell span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--slate-500);
+      margin-bottom: 3px;
+    }
+
+    .meta-cell strong {
+      font-size: 0.85rem;
+      color: var(--slate-900);
+    }
+
+    .meta-cell strong.blocked-text {
+      color: var(--red-700);
+    }
+
+    .action-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    .panel-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--slate-100);
+    }
+
+    .panel-heading {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--slate-700);
+    }
+
+    .txn-box {
+      display: none;
+    }
+
+    .txn-box.open {
+      display: block;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--slate-600);
+      margin-bottom: 5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 9px 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      color: var(--slate-900);
+      background: var(--white);
+    }
+
+    .status-msg {
+      margin-top: 8px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--red-700);
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .detail-item {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 6px;
+      padding: 12px;
+    }
+
+    .detail-item .k {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--slate-500);
+      margin-bottom: 4px;
+    }
+
+    .detail-item .v {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--slate-900);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      border: 1px solid #cbd5e1;
+      background: var(--slate-50);
+      color: var(--slate-700);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: var(--navy-900);
+      color: var(--white);
+      border-color: var(--navy-900);
+    }
+
+    .ledger {
+      list-style: none;
+    }
+
+    .ledger-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--slate-100);
+      gap: 12px;
+    }
+
+    .ledger-item:last-child {
+      border-bottom: none;
+    }
+
+    .txn-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--slate-900);
+    }
+
+    .txn-ref {
+      font-size: 0.74rem;
+      color: var(--slate-500);
+      margin-top: 2px;
+    }
+
+    .txn-amt-wrap {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .credit {
+      color: var(--green-600);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .debit {
+      color: var(--red-600);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .dir-pill {
+      display: inline-block;
+      font-size: 0.66rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-top: 3px;
+    }
+
+    .pill-in {
+      background: var(--green-50);
+      color: var(--green-700);
+    }
+
+    .pill-out {
+      background: var(--red-50);
+      color: var(--red-700);
+    }
+
+    .site-footer {
+      background: var(--navy-950);
+      color: #94a3b8;
+      font-size: 0.74rem;
+      padding: 16px 20px;
+      text-align: center;
+      border-top: 1px solid #1e293b;
+    }
+
+    @media (max-width: 680px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .balance-amount {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-utility">
+    <span>Meridian Banking • <strong>Commercial &amp; Treasury Online</strong></span>
+    <span>Session Holder: <strong id="activeUser">Lena Baker &amp; Ligon Kelley</strong></span>
+  </div>
+
+  <nav class="main-nav">
+    <div class="brand">
+      <div class="brand-emblem">M</div>
+      <div>
+        <div class="brand-name">MERIDIAN BANKING</div>
+        <div class="brand-division">Private &amp; Commercial Client Services</div>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <span class="demo-tag">Simulated Demo</span>
+      <button class="btn btn-signout btn-sm" onclick="signOut()">Sign Out</button>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- Bank Block Banner -->
+    <div class="alert-strip" id="alertBanner">
+      <strong>BANK BLOCK — UNABLE TO WITHDRAW OR TRANSFER:</strong> This account is currently placed under a bank restriction for <strong>Lena Baker</strong> &amp; <strong>Ligon Kelley</strong>. Withdrawals and outbound transfers are blocked.
+    </div>
+
+    <!-- Account Summary Card -->
+    <section class="summary-card">
+      <div class="summary-header">
+        <span class="acct-type">Commercial Treasury Checking • •••• 8842</span>
+        <span class="badge-blocked" id="headerBadge">Blocked • Unable to Withdraw or Transfer</span>
+      </div>
+      <div class="summary-body">
+        <div class="holders-row">
+          Joint Account Holders: <strong>Lena Baker</strong> &amp; <strong>Ligon Kelley</strong>
+        </div>
+        <div class="balance-row">
+          <div>
+            <div class="balance-amount" id="balanceDisplay">$2,500,000.00</div>
+            <div class="balance-sub">Current Ledger Balance (USD)</div>
+          </div>
+          <div class="balance-sub">
+            Withdrawal / Transfer Limit: <strong id="limitReadout" style="color:#b91c1c;">$0.00 (Blocked)</strong>
+          </div>
+        </div>
+        <div class="meta-grid">
+          <div class="meta-cell">
+            <span>Account Number</span>
+            <strong>0048 9210 8842</strong>
+          </div>
+          <div class="meta-cell">
+            <span>ABA Routing Number</span>
+            <strong>021000884</strong>
+          </div>
+          <div class="meta-cell">
+            <span>Bank Block Status</span>
+            <strong class="blocked-text" id="blockStatusCell">Blocked — Unable to withdraw or transfer</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Controls -->
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="openPanel('transfer')">Transfer / Withdraw</button>
+      <button class="btn btn-secondary" id="toggleBlockBtn" onclick="toggleBlockState()">Toggle Block (Demo)</button>
+      <button class="btn btn-secondary" onclick="toggleMaskBalance()">Hide / Show Balance</button>
+    </div>
+
+    <!-- Transfer / Withdrawal Panel -->
+    <section class="panel txn-box" id="txnPanel">
+      <div class="panel-top">
+        <span class="panel-heading">Transfer &amp; Withdrawal Request</span>
+      </div>
+      <div class="form-grid">
+        <div>
+          <label for="txnMode">Action Type</label>
+          <select id="txnMode">
+            <option value="transfer">Outbound Transfer</option>
+            <option value="withdraw">Account Withdrawal</option>
+          </select>
+        </div>
+        <div>
+          <label for="txnDest">Recipient / Branch</label>
+          <input type="text" id="txnDest" placeholder="e.g., Harbor Logistics LLC">
+        </div>
+        <div>
+          <label for="txnAmt">Amount (USD)</label>
+          <input type="number" id="txnAmt" placeholder="5000" min="1" step="0.01">
+        </div>
+      </div>
+      <button class="btn btn-dark" onclick="submitTxn()">Continue</button>
+      <div class="status-msg" id="txnMsg"></div>
+    </section>
+
+    <!-- Account & Restriction Details (Replaces Banking Features) -->
+    <section class="panel">
+      <div class="panel-top">
+        <span class="panel-heading">Account &amp; Restriction Summary</span>
+      </div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <div class="k">Restriction Notice</div>
+          <div class="v" id="restrictionSummary">Blocked — Unable to withdraw or transfer</div>
+        </div>
+        <div class="detail-item">
+          <div class="k">Authorized Signers</div>
+          <div class="v">Lena Baker, Ligon Kelley</div>
+        </div>
+        <div class="detail-item">
+          <div class="k">Hold Reference ID</div>
+          <div class="v">BLK-8842-MRD (Simulated)</div>
+        </div>
+        <div class="detail-item">
+          <div class="k">Branch / Desk</div>
+          <div class="v">New York Commercial Desk</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sent Out & Received History -->
+    <section class="panel">
+      <div class="panel-top">
+        <span class="panel-heading">Account Activity (Sent Out &amp; Received)</span>
+        <div class="filter-tabs">
+          <button class="tab-btn active" id="tab-all" onclick="filterLedger('all')">All</button>
+          <button class="tab-btn" id="tab-in" onclick="filterLedger('in')">Received</button>
+          <button class="tab-btn" id="tab-out" onclick="filterLedger('out')">Sent Out</button>
+        </div>
+      </div>
+      <ul class="ledger" id="ledgerList"></ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    Meridian Banking Demo Interface • Simulated Account Data for Preview Purposes Only
+  </footer>
+
+  <script>
+    if (sessionStorage.getItem("meridianAuth") !== "true") {
+      window.location.href = "login.html";
+    }
+
+    let accountBalance = 2500000.00;
+    let isMasked = false;
+    let accountBlocked = true;
+    let activeFilter = "all";
+
+    const signedInName = sessionStorage.getItem("meridianDemoUser");
+    if (signedInName) {
+      document.getElementById("activeUser").textContent = signedInName;
+    }
+
+    const historyItems = [
+      { dir: "in",  title: "Received Wire — Apex Industrial Supply",     ref: "Nov 24, 2026 • Fedwire #88412",   amt: 84500.00 },
+      { dir: "out", title: "Sent Out — Northstar Freight & Cargo",      ref: "Nov 23, 2026 • ACH #44109",       amt: 19250.00 },
+      { dir: "in",  title: "Received Transfer — Ligon Kelley",          ref: "Nov 21, 2026 • Internal #3091",   amt: 62000.00 },
+      { dir: "out", title: "Sent Out — Meridian Legal & Tax Group",     ref: "Nov 19, 2026 • Wire #77204",      amt: 14800.00 },
+      { dir: "in",  title: "Received ACH — BlueRidge Commercial Co.",   ref: "Nov 17, 2026 • Batch #99210",     amt: 53400.00 },
+      { dir: "out", title: "Sent Out — Pacific Warehouse Lease",        ref: "Nov 15, 2026 • ACH #43881",       amt: 28500.00 },
+      { dir: "in",  title: "Received Transfer — Lena Baker",            ref: "Nov 12, 2026 • Internal #3044",   amt: 41000.00 },
+      { dir: "out", title: "Sent Out — Summit Equipment Leasing",       ref: "Nov 10, 2026 • Wire #76890",      amt: 16750.00 },
+      { dir: "in",  title: "Received Wire — Crestview Holdings",        ref: "Nov 07, 2026 • Fedwire #87902",   amt: 95000.00 },
+      { dir: "out", title: "Sent Out — Clearview Insurance Broker",     ref: "Nov 04, 2026 • ACH #43115",       amt: 8900.00 },
+      { dir: "in",  title: "Received Settlement — Monarch Logistics",   ref: "Oct 30, 2026 • Fedwire #87104",   amt: 73200.00 },
+      { dir: "out", title: "Sent Out — Sterling Facilities Management", ref: "Oct 27, 2026 • ACH #42690",       amt: 11600.00 }
+    ];
+
+    function fmtUSD(num) {
+      return "$" + num.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function drawBalance() {
+      document.getElementById("balanceDisplay").textContent =
+        isMasked ? "••••••••••••" : fmtUSD(accountBalance);
+    }
+
+    function drawBlockUI() {
+      const banner = document.getElementById("alertBanner");
+      const badge = document.getElementById("headerBadge");
+      const cell = document.getElementById("blockStatusCell");
+      const summary = document.getElementById("restrictionSummary");
+      const limit = document.getElementById("limitReadout");
+
+      if (accountBlocked) {
+        banner.className = "alert-strip";
+        banner.innerHTML = "<strong>BANK BLOCK — UNABLE TO WITHDRAW OR TRANSFER:</strong> This account is currently placed under a bank restriction for <strong>Lena Baker</strong> &amp; <strong>Ligon Kelley</strong>. Withdrawals and outbound transfers are blocked.";
+        badge.className = "badge-blocked";
+        badge.textContent = "Blocked • Unable to Withdraw or Transfer";
+        cell.className = "blocked-text";
+        cell.textContent = "Blocked — Unable to withdraw or transfer";
+        summary.textContent = "Blocked — Unable to withdraw or transfer";
+        limit.style.color = "#b91c1c";
+        limit.textContent = "$0.00 (Blocked)";
+      } else {
+        banner.className = "alert-strip unblocked";
+        banner.innerHTML = "<strong>DEMO UNBLOCKED:</strong> Simulated bank block cleared for this preview session.";
+        badge.className = "badge-active";
+        badge.textContent = "Active • Demo Preview";
+        cell.className = "";
+        cell.textContent = "Cleared (Demo Session)";
+        summary.textContent = "No block active in current demo session";
+        limit.style.color = "#047857";
+        limit.textContent = "$250,000.00 (Demo)";
+      }
+    }
+
+    function drawLedger() {
+      const list = document.getElementById("ledgerList");
+      list.innerHTML = "";
+
+      const rows = historyItems.filter(item => {
+        if (activeFilter === "in") return item.dir === "in";
+        if (activeFilter === "out") return item.dir === "out";
+        return true;
+      });
+
+      rows.forEach(item => {
+        const isCredit = item.dir === "in";
+        const li = document.createElement("li");
+        li.className = "ledger-item";
+        li.innerHTML = `
+          <div>
+            <div class="txn-name">${item.title}</div>
+            <div class="txn-ref">${item.ref} • Sample</div>
+          </div>
+          <div class="txn-amt-wrap">
+            <div class="${isCredit ? "credit" : "debit"}">${isCredit ? "+" : "-"}${fmtUSD(item.amt)}</div>
+            <span class="dir-pill ${isCredit ? "pill-in" : "pill-out"}">${isCredit ? "RECEIVED" : "SENT OUT"}</span>
+          </div>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function filterLedger(mode) {
+      activeFilter = mode;
+      ["all", "in", "out"].forEach(m => {
+        document.getElementById("tab-" + m).classList.toggle("active", m === mode);
+      });
+      drawLedger();
+    }
+
+    function toggleMaskBalance() {
+      isMasked = !isMasked;
+      drawBalance();
+    }
+
+    function openPanel() {
+      const panel = document.getElementById("txnPanel");
+      panel.classList.toggle("open");
+      const msg = document.getElementById("txnMsg");
+      if (accountBlocked && panel.classList.contains("open")) {
+        msg.style.color = "#b91c1c";
+        msg.textContent = "Blocked — Unable to withdraw or transfer.";
+      } else {
+        msg.textContent = "";
+      }
+    }
+
+    function toggleBlockState() {
+      accountBlocked = !accountBlocked;
+      drawBlockUI();
+      document.getElementById("txnMsg").textContent = "";
+    }
+
+    function submitTxn() {
+      const msg = document.getElementById("txnMsg");
+      if (accountBlocked) {
+        msg.style.color = "#b91c1c";
+        msg.textContent = "Blocked — Unable to withdraw or transfer.";
+        return;
+      }
+
+      const mode = document.getElementById("txnMode").value;
+      const dest = document.getElementById("txnDest").value.trim() || (mode === "withdraw" ? "Branch Withdrawal" : "Recipient Account");
+      const amt = parseFloat(document.getElementById("txnAmt").value);
+
+      if (isNaN(amt) || amt <= 0) {
+        msg.style.color = "#b91c1c";
+        msg.textContent = "Enter a valid positive amount.";
+        return;
+      }
+
+      if (amt > accountBalance) {
+        msg.style.color = "#b91c1c";
+        msg.textContent = "Amount exceeds account balance.";
+        return;
+      }
+
+      accountBalance -= amt;
+      drawBalance();
+      historyItems.unshift({
+        dir: "out",
+        title: (mode === "withdraw" ? "Withdrawal — " : "Sent Out — ") + dest,
+        ref: "Today • Demo Entry",
+        amt: amt
+      });
+      drawLedger();
+      document.getElementById("txnDest").value = "";
+      document.getElementById("txnAmt").value = "";
+      msg.style.color = "#047857";
+      msg.textContent = "Simulated entry recorded.";
+    }
+
+    function signOut() {
+      sessionStorage.removeItem("meridianAuth");
+      sessionStorage.removeItem("meridianDemoUser");
+      window.location.href = "login.html";
+    }
+
+    drawBalance();
+    drawBlockUI();
+    drawLedger();
+  </script>
+</body>
+</html>
