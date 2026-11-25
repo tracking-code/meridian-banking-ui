@@ -147,13 +147,13 @@
     <div class="tag">Demo Sign-In • Credential Check</div>
     <h1>Sign In to Account</h1>
     <p class="sub">
-      Enter your demo login and password to view availability, balance, and features for <strong>Lena Baker</strong> &amp; <strong>Ligon Kelley</strong>.
+      Enter your login and password to access your account overview, balance, and activity.
     </p>
 
     <form onsubmit="verifyLogin(event)">
       <div class="field">
         <label for="loginId">Login (Email or Username)</label>
-        <input type="text" id="loginId" placeholder="lena.baker@demo.local" required>
+        <input type="text" id="loginId" placeholder="Enter email or username" required>
       </div>
       <div class="field">
         <label for="loginPass">Password</label>
@@ -164,7 +164,7 @@
     </form>
 
     <p class="note">
-      Demo credentials: <code>lena.baker@demo.local</code> or <code>ligon.kelley@demo.local</code> with password <code>Meridian#2500</code>. Static front-end demo only.
+      Demo environment preview. Enter your assigned demo login and password to continue.
     </p>
   </div>
 
@@ -182,7 +182,7 @@
       const err = document.getElementById("errorBox");
 
       if (!VALID_USERS[id] || pass !== DEMO_PASSWORD) {
-        err.textContent = "Invalid demo login or password. Try lena.baker@demo.local and Meridian#2500.";
+        err.textContent = "Invalid login or password. Please check your credentials and try again.";
         return;
       }
 
